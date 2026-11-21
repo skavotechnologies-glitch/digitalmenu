@@ -42,7 +42,7 @@ export const THEME_PRESETS = [
 ];
 
 export const INITIAL_SHOP_SETTINGS = {
-  name: 'Bala Café',
+  name: 'Nano Café',
   tagline: 'Crafted with Passion. Locally Loved.',
   description: 'An artisanal coffeehouse and culinary studio celebrating slow-brewed estate roasts, botanical tea infusions, cold-pressed elixirs, and fresh butter savouries.',
   location: '100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru, 560038',
@@ -53,8 +53,8 @@ export const INITIAL_SHOP_SETTINGS = {
   currency: '₹',
   autoResetDaily: true,
   lastResetDate: new Date().toISOString().split('T')[0],
-  wifiName: 'BalaCafe_Guest_5G',
-  wifiPassword: 'welcome2balacafe',
+  wifiName: 'NanoCafe_Guest_5G',
+  wifiPassword: 'welcome2nanocafe',
 };
 
 export const INITIAL_CATEGORIES = [

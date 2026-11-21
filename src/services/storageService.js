@@ -5,9 +5,9 @@ import {
 } from '../constants/initialData';
 
 const KEYS = {
-  SHOP_SETTINGS: 'qr_menu_shop_settings_v3',
-  CATEGORIES: 'qr_menu_categories_v3',
-  ITEMS: 'qr_menu_items_v3',
+  SHOP_SETTINGS: 'qr_menu_shop_settings_v4',
+  CATEGORIES: 'qr_menu_categories_v4',
+  ITEMS: 'qr_menu_items_v4',
 };
 
 /**
