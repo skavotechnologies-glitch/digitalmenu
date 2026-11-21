@@ -4,25 +4,49 @@
 
 :root {
   --color-cream: #FAF7F2;
-  --color-forest: #183D2B;
+  --color-forest: #143324;
   --color-sage: #8FA58B;
   --color-gold: #C59A5B;
-  --color-charcoal: #242424;
-  --color-charcoal-muted: #77736D;
+  --color-charcoal: #1E201E;
+  --color-charcoal-muted: #6F736E;
 }
 
 body {
   font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   background-color: #FAF7F2;
-  color: #242424;
+  color: #1E201E;
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, .font-editorial {
   font-family: 'Playfair Display', Georgia, serif;
 }
 
-/* Custom scrollbars for clean category navigation */
+/* Custom ambient radial mesh background */
+.ambient-bg {
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(197, 154, 91, 0.07) 0px, transparent 50%),
+    radial-gradient(at 90% 20%, rgba(20, 51, 36, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 90%, rgba(143, 165, 139, 0.08) 0px, transparent 50%);
+}
+
+/* Glassmorphism surfaces */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.glass-surface-dark {
+  background: rgba(20, 51, 36, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(197, 154, 91, 0.2);
+}
+
+/* Hide scrollbars for pill bars */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -31,15 +55,30 @@ h1, h2, h3, .font-editorial {
   scrollbar-width: none;
 }
 
-/* Smooth micro-animations */
+/* Card hover physics */
 .menu-card-transition {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.2s ease,
+              background-color 0.2s ease;
 }
 
 @media (hover: hover) {
   .menu-card-transition:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.004);
   }
+}
+
+/* Shimmer gradient effect for VIP badges */
+.badge-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(197, 154, 91, 0.15) 0%,
+    rgba(228, 191, 120, 0.4) 50%,
+    rgba(197, 154, 91, 0.15) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
 }
 
 /* Print styling for Table Card Standee */
