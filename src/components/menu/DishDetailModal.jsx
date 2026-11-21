@@ -23,7 +23,7 @@ export const DishDetailModal = ({
         role="dialog"
       >
         {/* Large Food Photography with Badges */}
-        <div className="relative w-full h-56 sm:h-64 bg-cream overflow-hidden shrink-0">
+        <div className="relative w-full h-44 sm:h-56 bg-cream overflow-hidden shrink-0">
           <img
             src={dish.image}
             alt={dish.name}

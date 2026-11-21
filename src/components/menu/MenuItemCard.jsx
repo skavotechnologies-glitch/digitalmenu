@@ -102,7 +102,7 @@ export const MenuItemCard = ({
       </div>
 
       {/* Right Column: Food Image */}
-      <div className="relative shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-cream border border-cream-dark/60 shadow-xs">
+      <div className="relative shrink-0 w-20 h-20 sm:w-24 sm:h-24 aspect-square rounded-xl overflow-hidden bg-cream border border-cream-dark/60 shadow-xs self-center sm:self-auto">
         <img
           src={item.image}
           alt={item.name}

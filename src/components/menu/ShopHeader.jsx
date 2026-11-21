@@ -28,7 +28,7 @@ export const ShopHeader = ({ shopSettings }) => {
           <div className="flex items-center gap-4">
             {/* Minimal Circular Logo */}
             <div className="relative shrink-0">
-              <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white p-0.5 border border-gold/40 shadow-card ring-4 ring-cream/80">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white p-0.5 border border-gold/40 shadow-subtle ring-2 ring-cream/80">
                 <img
                   src={shopSettings.logo}
                   alt={shopSettings.name}
