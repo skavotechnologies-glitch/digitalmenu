@@ -18,6 +18,8 @@ import {
   ExternalLink,
   RotateCcw,
   Sparkles,
+  Sun,
+  RefreshCw,
 } from 'lucide-react';
 
 export const OwnerDashboard = () => {
@@ -40,6 +42,7 @@ export const OwnerDashboard = () => {
     toggleItemPopular,
     moveItem,
     resetToSampleData,
+    restoreAllSoldOut,
   } = useMenu();
 
   // Navigation tab in Owner dashboard
@@ -259,6 +262,30 @@ export const OwnerDashboard = () => {
         {/* 3. Tab Views */}
         {activeTab === 'items' && (
           <div className="space-y-4">
+            {/* Sold-out alert banner with 1-click restore */}
+            {stats.soldOutItems > 0 && (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 shadow-2xs">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                  <p className="text-xs font-semibold text-stone-800">
+                    <span className="font-extrabold text-amber-900">{stats.soldOutItems} item(s)</span> are currently marked Sold Out.
+                    {shopSettings.autoResetDaily !== false && (
+                      <span className="text-stone-500 block sm:inline sm:ml-1">
+                        (They will automatically reset to Available tomorrow at 00:00 AM)
+                      </span>
+                    )}
+                  </p>
+                </div>
+                <button
+                  onClick={restoreAllSoldOut}
+                  className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-stone-50 border border-amber-300 text-amber-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors shrink-0"
+                >
+                  <Sun className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Restore All Stock Now</span>
+                </button>
+              </div>
+            )}
+
             {/* Filter & Search Bar */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-stone-200 shadow-2xs">
               <div className="relative flex-1">

@@ -152,6 +152,26 @@ export const ShopSettingsModal = ({
             />
           </div>
 
+          {/* Daily Auto-Reset Sold Out Items */}
+          <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-start justify-between gap-3">
+            <div>
+              <span className="block text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                <span>🌅 Daily Auto-Reset Sold-Out Items</span>
+              </span>
+              <p className="text-[11px] text-stone-600 mt-0.5 leading-relaxed">
+                Automatically reset all sold-out products back to Available every new morning at midnight when fresh morning stock arrives.
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-0.5">
+              <input
+                type="checkbox"
+                checked={formData.autoResetDaily !== false}
+                onChange={(e) => setFormData({ ...formData, autoResetDaily: e.target.checked })}
+                className="w-5 h-5 accent-amber-600 rounded cursor-pointer"
+              />
+            </label>
+          </div>
+
           {/* Theme Color Presets */}
           <div>
             <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">

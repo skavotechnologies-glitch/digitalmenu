@@ -26,6 +26,24 @@ export const MenuProvider = ({ children }) => {
     root.style.setProperty('--color-brand-text', activeTheme.primaryText);
   }, [activeTheme]);
 
+  // Check and run automatic daily reset for sold out items
+  useEffect(() => {
+    const runResetCheck = () => {
+      const result = storageService.checkAndPerformDailyReset();
+      if (result.didReset && result.count > 0) {
+        setItems(result.items);
+        setShopSettings(result.settings);
+        showToast(`🌅 Good morning! ${result.count} sold-out item(s) automatically restored to Available stock.`);
+      }
+    };
+
+    runResetCheck();
+
+    // Check again when user returns to tab
+    window.addEventListener('focus', runResetCheck);
+    return () => window.removeEventListener('focus', runResetCheck);
+  }, []);
+
   // Toast notification helper
   const showToast = (message, type = 'success') => {
     const id = Date.now() + Math.random().toString(36).substring(2, 6);
@@ -206,6 +224,21 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
+  // Restore all sold out items back to available manually
+  const restoreAllSoldOut = () => {
+    let count = 0;
+    const updated = items.map(item => {
+      if (!item.isAvailable) {
+        count++;
+        return { ...item, isAvailable: true };
+      }
+      return item;
+    });
+    setItems(updated);
+    storageService.saveItems(updated);
+    showToast(`Restored all ${count} item(s) to Available stock!`);
+  };
+
   // Computed dashboard statistics
   const stats = useMemo(() => {
     return {
@@ -240,6 +273,7 @@ export const MenuProvider = ({ children }) => {
         toggleItemPopular,
         moveItem,
         resetToSampleData,
+        restoreAllSoldOut,
       }}
     >
       {children}

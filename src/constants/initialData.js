@@ -61,6 +61,8 @@ export const INITIAL_SHOP_SETTINGS = {
   logo: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80',
   themeId: 'amber',
   currency: '₹',
+  autoResetDaily: true,
+  lastResetDate: new Date().toISOString().split('T')[0],
 };
 
 export const INITIAL_CATEGORIES = [
