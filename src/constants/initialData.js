@@ -42,7 +42,7 @@ export const THEME_PRESETS = [
 ];
 
 export const INITIAL_SHOP_SETTINGS = {
-  name: 'NAACHI Café',
+  name: 'Bala Café',
   tagline: 'Freshly brewed. Locally loved.',
   description: 'An artisanal neighborhood sanctuary celebrating slow-brewed estate coffees, delicate botanical teas, cold-pressed elixirs, and fresh bakery savouries.',
   location: '100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru, 560038',

@@ -121,7 +121,7 @@ export const OwnerDashboard = () => {
       isOpen: true,
       type: 'reset',
       target: null,
-      title: 'Restore NAACHI Café Menu Sample?',
+      title: 'Restore Bala Café Menu Sample?',
       message: 'This will reset all categories, dishes, prices, and branding back to the default restaurant sample data.',
     });
   };
