@@ -44,6 +44,16 @@ export const MenuProvider = ({ children }) => {
     return () => window.removeEventListener('focus', runResetCheck);
   }, []);
 
+  // Real-time synchronization across all devices via Firebase Firestore
+  useEffect(() => {
+    const unsubscribe = storageService.subscribeToCloudMenu((cloudData) => {
+      if (cloudData.shopSettings) setShopSettings(cloudData.shopSettings);
+      if (cloudData.categories) setCategories(cloudData.categories);
+      if (cloudData.items) setItems(cloudData.items);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // Toast notification helper
   const showToast = (message, type = 'success') => {
     const id = Date.now() + Math.random().toString(36).substring(2, 6);
@@ -274,6 +284,7 @@ export const MenuProvider = ({ children }) => {
         moveItem,
         resetToSampleData,
         restoreAllSoldOut,
+        isCloudSync: storageService.isCloudSyncEnabled(),
       }}
     >
       {children}

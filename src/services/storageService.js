@@ -3,6 +3,8 @@ import {
   INITIAL_CATEGORIES,
   INITIAL_ITEMS
 } from '../constants/initialData';
+import { db, isFirebaseConfigured } from './firebase';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 
 const KEYS = {
   SHOP_SETTINGS: 'qr_menu_shop_settings_v4',
@@ -10,70 +12,149 @@ const KEYS = {
   ITEMS: 'qr_menu_items_v4',
 };
 
+const FIRESTORE_DOC_PATH = 'restaurants';
+const FIRESTORE_DOC_ID = 'nano-cafe';
+
 /**
- * Storage Service abstraction.
- * Currently uses browser LocalStorage.
- * Can be swapped with Firebase Firestore / Supabase / REST API without altering UI components.
+ * Hybrid Storage Service:
+ * 1. If Firebase is configured (.env): syncs live with Google Firestore in real time.
+ * 2. If Firebase is not yet configured: seamlessly operates on LocalStorage.
  */
 export const storageService = {
-  getShopSettings: () => {
+  isCloudSyncEnabled: () => isFirebaseConfigured,
+
+  // Listen to live cloud updates across all phones
+  subscribeToCloudMenu: (onUpdate) => {
+    if (!isFirebaseConfigured || !db) return () => {};
+
+    try {
+      const docRef = doc(db, FIRESTORE_DOC_PATH, FIRESTORE_DOC_ID);
+      const unsubscribe = onSnapshot(
+        docRef,
+        async (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.data();
+            if (data) {
+              if (data.shopSettings) storageService.saveShopSettingsLocal(data.shopSettings);
+              if (data.categories) storageService.saveCategoriesLocal(data.categories);
+              if (data.items) storageService.saveItemsLocal(data.items);
+              onUpdate({
+                shopSettings: data.shopSettings || INITIAL_SHOP_SETTINGS,
+                categories: data.categories || INITIAL_CATEGORIES,
+                items: data.items || INITIAL_ITEMS,
+              });
+            }
+          } else {
+            // First time setup in Firestore: seed initial data
+            await setDoc(docRef, {
+              shopSettings: storageService.getShopSettingsLocal(),
+              categories: storageService.getCategoriesLocal(),
+              items: storageService.getItemsLocal(),
+              updatedAt: new Date().toISOString(),
+            });
+          }
+        },
+        (error) => {
+          console.warn('Firestore subscription fallback to LocalStorage:', error);
+        }
+      );
+      return unsubscribe;
+    } catch (e) {
+      console.warn('Could not start Firestore listener:', e);
+      return () => {};
+    }
+  },
+
+  // Push full state to Firestore if enabled
+  syncToCloud: async (settings, categories, items) => {
+    if (!isFirebaseConfigured || !db) return;
+    try {
+      const docRef = doc(db, FIRESTORE_DOC_PATH, FIRESTORE_DOC_ID);
+      await setDoc(
+        docRef,
+        {
+          shopSettings: settings || storageService.getShopSettingsLocal(),
+          categories: categories || storageService.getCategoriesLocal(),
+          items: items || storageService.getItemsLocal(),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      console.error('Failed to sync to Firestore:', e);
+    }
+  },
+
+  getShopSettingsLocal: () => {
     try {
       const data = localStorage.getItem(KEYS.SHOP_SETTINGS);
       return data ? JSON.parse(data) : INITIAL_SHOP_SETTINGS;
     } catch (e) {
-      console.error('Failed to load shop settings from LocalStorage', e);
       return INITIAL_SHOP_SETTINGS;
     }
   },
 
-  saveShopSettings: (settings) => {
+  saveShopSettingsLocal: (settings) => {
     try {
       localStorage.setItem(KEYS.SHOP_SETTINGS, JSON.stringify(settings));
       return true;
     } catch (e) {
-      console.error('Failed to save shop settings to LocalStorage', e);
       return false;
     }
   },
 
-  getCategories: () => {
+  getCategoriesLocal: () => {
     try {
       const data = localStorage.getItem(KEYS.CATEGORIES);
       return data ? JSON.parse(data) : INITIAL_CATEGORIES;
     } catch (e) {
-      console.error('Failed to load categories from LocalStorage', e);
       return INITIAL_CATEGORIES;
     }
   },
 
-  saveCategories: (categories) => {
+  saveCategoriesLocal: (categories) => {
     try {
       localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(categories));
       return true;
     } catch (e) {
-      console.error('Failed to save categories to LocalStorage', e);
       return false;
     }
   },
 
-  getItems: () => {
+  getItemsLocal: () => {
     try {
       const data = localStorage.getItem(KEYS.ITEMS);
       return data ? JSON.parse(data) : INITIAL_ITEMS;
     } catch (e) {
-      console.error('Failed to load items from LocalStorage', e);
       return INITIAL_ITEMS;
     }
   },
 
-  saveItems: (items) => {
+  saveItemsLocal: (items) => {
     try {
       localStorage.setItem(KEYS.ITEMS, JSON.stringify(items));
       return true;
     } catch (e) {
-      console.error('Failed to save items to LocalStorage', e);
       return false;
     }
+  },
+
+  getShopSettings: () => storageService.getShopSettingsLocal(),
+  saveShopSettings: (settings, currentCategories, currentItems) => {
+    storageService.saveShopSettingsLocal(settings);
+    storageService.syncToCloud(settings, currentCategories, currentItems);
+  },
+
+  getCategories: () => storageService.getCategoriesLocal(),
+  saveCategories: (categories, currentSettings, currentItems) => {
+    storageService.saveCategoriesLocal(categories);
+    storageService.syncToCloud(currentSettings, categories, currentItems);
+  },
+
+  getItems: () => storageService.getItemsLocal(),
+  saveItems: (items, currentSettings, currentCategories) => {
+    storageService.saveItemsLocal(items);
+    storageService.syncToCloud(currentSettings, currentCategories, items);
   },
 
   resetAll: () => {
@@ -81,21 +162,21 @@ export const storageService = {
       localStorage.removeItem(KEYS.SHOP_SETTINGS);
       localStorage.removeItem(KEYS.CATEGORIES);
       localStorage.removeItem(KEYS.ITEMS);
-      return {
+      const defaults = {
         shopSettings: INITIAL_SHOP_SETTINGS,
         categories: INITIAL_CATEGORIES,
         items: INITIAL_ITEMS,
       };
+      storageService.syncToCloud(defaults.shopSettings, defaults.categories, defaults.items);
+      return defaults;
     } catch (e) {
-      console.error('Failed to reset LocalStorage', e);
       return null;
     }
   },
 
   checkAndPerformDailyReset: () => {
     try {
-      const settings = storageService.getShopSettings();
-      // If autoResetDaily is not explicitly false, treat it as true by default
+      const settings = storageService.getShopSettingsLocal();
       const isAutoReset = settings.autoResetDaily !== false;
       if (!isAutoReset) {
         return { didReset: false, count: 0 };
@@ -104,13 +185,11 @@ export const storageService = {
       const today = new Date().toISOString().split('T')[0];
       const lastReset = settings.lastResetDate;
 
-      // If already reset today, do nothing
       if (lastReset === today) {
         return { didReset: false, count: 0 };
       }
 
-      // It's a new day! Reset all sold-out items to available
-      const items = storageService.getItems();
+      const items = storageService.getItemsLocal();
       let resetCount = 0;
       const updatedItems = items.map(item => {
         if (!item.isAvailable) {
@@ -121,11 +200,12 @@ export const storageService = {
       });
 
       if (resetCount > 0) {
-        storageService.saveItems(updatedItems);
+        storageService.saveItemsLocal(updatedItems);
       }
 
       const updatedSettings = { ...settings, lastResetDate: today };
-      storageService.saveShopSettings(updatedSettings);
+      storageService.saveShopSettingsLocal(updatedSettings);
+      storageService.syncToCloud(updatedSettings, null, updatedItems);
 
       return {
         didReset: true,
@@ -134,7 +214,6 @@ export const storageService = {
         settings: updatedSettings,
       };
     } catch (e) {
-      console.error('Failed to check daily reset', e);
       return { didReset: false, count: 0 };
     }
   }

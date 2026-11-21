@@ -41,6 +41,7 @@ export const OwnerDashboard = () => {
     moveItem,
     resetToSampleData,
     restoreAllSoldOut,
+    isCloudSync,
   } = useMenu();
 
   const [activeTab, setActiveTab] = useState('items'); // 'items' | 'categories' | 'qr'
@@ -154,9 +155,12 @@ export const OwnerDashboard = () => {
               <h1 className="font-serif text-sm sm:text-base font-bold truncate leading-tight">
                 {shopSettings.name}
               </h1>
-              <span className="text-[10px] text-sage font-medium tracking-wide">
-                Menu Management Tool
-              </span>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${isCloudSync ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+                <span className="text-[10px] text-cream/70 font-sans">
+                  {isCloudSync ? 'Firebase Cloud Live' : 'Local Storage (Ready for Firebase)'}
+                </span>
+              </div>
             </div>
           </div>
 
