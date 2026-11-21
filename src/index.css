@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-brand-primary: #d97706;
+  --color-brand-hover: #b45309;
+  --color-brand-light: #fef3c7;
+  --color-brand-badge: #fde68a;
+  --color-brand-text: #92400e;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom scrollbars for category pill navigation */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Print styling for Table Card Standee */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Hide all app UI during printing */
+  #root > *:not(#print-root) {
+    display: none !important;
+  }
+
+  /* Make sure print container displays cleanly */
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  @page {
+    size: auto;
+    margin: 10mm;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
