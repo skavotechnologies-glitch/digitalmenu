@@ -3,25 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --color-brand-primary: #d97706;
-  --color-brand-hover: #b45309;
-  --color-brand-light: #fef3c7;
-  --color-brand-badge: #fde68a;
-  --color-brand-text: #92400e;
+  --color-cream: #FAF7F2;
+  --color-forest: #183D2B;
+  --color-sage: #8FA58B;
+  --color-gold: #C59A5B;
+  --color-charcoal: #242424;
+  --color-charcoal-muted: #77736D;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  background-color: #FAF7F2;
+  color: #242424;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Custom scrollbars for category pill navigation */
+h1, h2, h3, .font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Custom scrollbars for clean category navigation */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Smooth micro-animations */
+.menu-card-transition {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .menu-card-transition:hover {
+    transform: translateY(-2px);
+  }
 }
 
 /* Print styling for Table Card Standee */
@@ -33,12 +51,10 @@ body {
     margin: 0 !important;
   }
   
-  /* Hide all app UI during printing */
   #root > *:not(#print-root) {
     display: none !important;
   }
 
-  /* Make sure print container displays cleanly */
   .no-print {
     display: none !important;
   }

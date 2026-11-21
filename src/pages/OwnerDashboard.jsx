@@ -17,9 +17,7 @@ import {
   Search,
   ExternalLink,
   RotateCcw,
-  Sparkles,
   Sun,
-  RefreshCw,
 } from 'lucide-react';
 
 export const OwnerDashboard = () => {
@@ -45,25 +43,21 @@ export const OwnerDashboard = () => {
     restoreAllSoldOut,
   } = useMenu();
 
-  // Navigation tab in Owner dashboard
   const [activeTab, setActiveTab] = useState('items'); // 'items' | 'categories' | 'qr'
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Modals state
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
 
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
-  // Deletion confirmations
   const [confirmDelete, setConfirmDelete] = useState({
     isOpen: false,
-    type: null, // 'item' | 'category' | 'reset'
+    type: null,
     target: null,
   });
 
-  // Filter items in management view
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
       if (selectedCategoryFilter !== 'all' && item.categoryId !== selectedCategoryFilter) {
@@ -79,7 +73,6 @@ export const OwnerDashboard = () => {
     });
   }, [items, selectedCategoryFilter, searchQuery]);
 
-  // Handle Item Modal Open
   const handleOpenAddItem = () => {
     setEditingItem(null);
     setIsItemModalOpen(true);
@@ -100,14 +93,13 @@ export const OwnerDashboard = () => {
     setEditingItem(null);
   };
 
-  // Confirm delete triggers
   const promptDeleteItem = (item) => {
     setConfirmDelete({
       isOpen: true,
       type: 'item',
       target: item,
-      title: 'Delete Menu Item?',
-      message: `Are you sure you want to remove "${item.name}" from your menu? This action cannot be undone.`,
+      title: 'Remove Dish from Menu?',
+      message: `Are you sure you want to remove "${item.name}"? This will immediately remove it from the customer view.`,
     });
   };
 
@@ -117,10 +109,10 @@ export const OwnerDashboard = () => {
       isOpen: true,
       type: 'category',
       target: category,
-      title: `Delete Category "${category.name}"?`,
+      title: `Delete Section "${category.name}"?`,
       message: affectedCount > 0
-        ? `Warning: There are ${affectedCount} items in this category. Deleting this category will also remove all items inside it.`
-        : `Are you sure you want to delete this empty category?`,
+        ? `Warning: There are ${affectedCount} items in this section. Deleting it will also remove all its items.`
+        : `Are you sure you want to delete this section?`,
     });
   };
 
@@ -129,8 +121,8 @@ export const OwnerDashboard = () => {
       isOpen: true,
       type: 'reset',
       target: null,
-      title: 'Reset to Sample Menu Data?',
-      message: 'This will restore the original Bengaluru tea & juice stall sample menu items, prices, and categories. Any custom changes will be overwritten.',
+      title: 'Restore NAACHI Café Menu Sample?',
+      message: 'This will reset all categories, dishes, prices, and branding back to the default restaurant sample data.',
     });
   };
 
@@ -146,55 +138,53 @@ export const OwnerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-stone-100/70 pb-20 font-sans">
-      {/* Owner Top Bar */}
-      <header className="bg-stone-900 text-white border-b border-stone-800 sticky top-0 z-30 shadow-md">
+    <div className="min-h-screen bg-cream/60 pb-20 font-sans text-charcoal">
+      {/* Top Header */}
+      <header className="bg-forest text-cream sticky top-0 z-30 shadow-subtle border-b border-forest-light">
         <div className="max-w-5xl mx-auto px-4 py-3 sm:px-6 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div 
-              className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white shadow-xs shrink-0"
-              style={{ backgroundColor: 'var(--color-brand-primary)' }}
-            >
-              <Store className="w-4 h-4" />
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-full overflow-hidden p-0.5 bg-white/10 border border-gold/40 shrink-0">
+              <img
+                src={shopSettings.logo}
+                alt={shopSettings.name}
+                className="w-full h-full rounded-full object-cover"
+              />
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm sm:text-base font-extrabold truncate leading-tight">
+              <h1 className="font-serif text-sm sm:text-base font-bold truncate leading-tight">
                 {shopSettings.name}
               </h1>
-              <span className="text-[10px] text-stone-400 font-medium">
-                Shop Owner Dashboard
+              <span className="text-[10px] text-sage font-medium tracking-wide">
+                Menu Management Tool
               </span>
             </div>
           </div>
 
           {/* Top Quick Links */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* View live customer menu */}
             <a
               href="/menu"
               target="_blank"
               rel="noreferrer"
-              className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold flex items-center gap-1.5 transition-colors"
-              title="Open public customer view in new tab"
+              className="px-3.5 py-1.5 rounded-full bg-cream/10 hover:bg-cream/20 text-cream text-xs font-medium flex items-center gap-1.5 transition-colors border border-cream/20"
+              title="Open public customer menu"
             >
-              <span>View Customer Menu</span>
-              <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+              <span>Preview Menu</span>
+              <ExternalLink className="w-3.5 h-3.5 text-gold" />
             </a>
 
-            {/* Shop Settings */}
             <button
               onClick={() => setIsSettingsModalOpen(true)}
-              className="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 transition-colors"
-              title="Shop Branding & Contact Settings"
+              className="p-2 rounded-full bg-cream/10 hover:bg-cream/20 text-cream transition-colors border border-cream/20"
+              title="Restaurant Settings"
             >
               <Store className="w-4 h-4" />
             </button>
 
-            {/* Reset sample data */}
             <button
               onClick={promptResetDefaults}
-              className="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-stone-200 transition-colors"
-              title="Reset to sample data"
+              className="p-2 rounded-full bg-cream/10 hover:bg-cream/20 text-sage hover:text-cream transition-colors border border-cream/20"
+              title="Restore sample menu"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
@@ -202,59 +192,58 @@ export const OwnerDashboard = () => {
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 pt-6 sm:px-6">
-        {/* 1. Dashboard Statistics */}
+        {/* 1. Summary Cards */}
         <DashboardStats stats={stats} />
 
-        {/* 2. Primary Tabs */}
-        <div className="flex items-center justify-between border-b border-stone-200/90 pb-3 mb-6 gap-2 overflow-x-auto no-scrollbar">
+        {/* 2. Navigation Tabs */}
+        <div className="flex items-center justify-between border-b border-cream-dark pb-3 mb-6 gap-2 overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setActiveTab('items')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 transition-all ${
                 activeTab === 'items'
-                  ? 'bg-stone-900 text-white shadow-xs'
-                  : 'bg-white text-stone-600 hover:bg-stone-200/70'
+                  ? 'bg-forest text-cream shadow-xs font-semibold'
+                  : 'bg-white text-charcoal-muted hover:bg-cream hover:text-charcoal border border-cream-dark'
               }`}
             >
               <Utensils className="w-4 h-4" />
-              <span>Menu Items ({items.length})</span>
+              <span>Menu Dishes ({items.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('categories')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 transition-all ${
                 activeTab === 'categories'
-                  ? 'bg-stone-900 text-white shadow-xs'
-                  : 'bg-white text-stone-600 hover:bg-stone-200/70'
+                  ? 'bg-forest text-cream shadow-xs font-semibold'
+                  : 'bg-white text-charcoal-muted hover:bg-cream hover:text-charcoal border border-cream-dark'
               }`}
             >
               <Layers className="w-4 h-4" />
-              <span>Categories ({categories.length})</span>
+              <span>Sections ({categories.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('qr')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 transition-all ${
                 activeTab === 'qr'
-                  ? 'bg-stone-900 text-white shadow-xs'
-                  : 'bg-white text-stone-600 hover:bg-stone-200/70'
+                  ? 'bg-forest text-cream shadow-xs font-semibold'
+                  : 'bg-white text-charcoal-muted hover:bg-cream hover:text-charcoal border border-cream-dark'
               }`}
             >
               <QrCode className="w-4 h-4" />
-              <span>QR Code & Standee</span>
+              <span>Tabletop QR</span>
             </button>
           </div>
 
           {activeTab === 'items' && (
             <button
               onClick={handleOpenAddItem}
-              className="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm text-white flex items-center gap-1.5 shadow-md transition-opacity hover:opacity-95 shrink-0"
-              style={{ backgroundColor: 'var(--color-brand-primary)' }}
+              className="px-4 py-2 rounded-full font-medium text-xs sm:text-sm text-cream bg-forest hover:bg-forest-light flex items-center gap-1.5 shadow-sm transition-colors shrink-0"
             >
               <Plus className="w-4 h-4" />
-              <span>Add Menu Item</span>
+              <span>Add Dish</span>
             </button>
           )}
         </div>
@@ -264,49 +253,49 @@ export const OwnerDashboard = () => {
           <div className="space-y-4">
             {/* Sold-out alert banner with 1-click restore */}
             {stats.soldOutItems > 0 && (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 shadow-subtle">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
-                  <p className="text-xs font-semibold text-stone-800">
-                    <span className="font-extrabold text-amber-900">{stats.soldOutItems} item(s)</span> are currently marked Sold Out.
+                  <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse shrink-0" />
+                  <p className="text-xs font-medium text-amber-950">
+                    <span className="font-bold">{stats.soldOutItems} dish(es)</span> marked Sold Out.
                     {shopSettings.autoResetDaily !== false && (
-                      <span className="text-stone-500 block sm:inline sm:ml-1">
-                        (They will automatically reset to Available tomorrow at 00:00 AM)
+                      <span className="text-charcoal-muted block sm:inline sm:ml-1">
+                        (Auto-resets to Available tomorrow at midnight)
                       </span>
                     )}
                   </p>
                 </div>
                 <button
                   onClick={restoreAllSoldOut}
-                  className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-stone-50 border border-amber-300 text-amber-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors shrink-0"
+                  className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-cream border border-amber-300 text-amber-950 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors shrink-0"
                 >
-                  <Sun className="w-3.5 h-3.5 text-amber-600" />
+                  <Sun className="w-3.5 h-3.5 text-gold-dark" />
                   <span>Restore All Stock Now</span>
                 </button>
               </div>
             )}
 
             {/* Filter & Search Bar */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-stone-200 shadow-2xs">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-cream-dark shadow-subtle">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+                <Search className="w-4 h-4 text-sage absolute left-3 top-2.5" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Quick search items by name or description..."
-                  className="w-full pl-9 pr-4 py-1.5 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  placeholder="Quick search dishes..."
+                  className="w-full pl-9 pr-4 py-1.5 rounded-xl border border-cream-dark text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-forest/15 focus:border-forest"
                 />
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <span className="text-xs font-semibold text-stone-500">Filter:</span>
+                <span className="text-xs font-medium text-charcoal-muted">Filter:</span>
                 <select
                   value={selectedCategoryFilter}
                   onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-                  className="px-3 py-1.5 rounded-xl border border-stone-200 text-xs sm:text-sm font-semibold bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="px-3 py-1.5 rounded-xl border border-cream-dark text-xs sm:text-sm font-medium bg-white text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/15"
                 >
-                  <option value="all">All Categories</option>
+                  <option value="all">All Sections</option>
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
@@ -316,7 +305,7 @@ export const OwnerDashboard = () => {
               </div>
             </div>
 
-            {/* Menu Items List */}
+            {/* Dishes List */}
             <ItemList
               items={filteredItems}
               categories={categories}
@@ -346,21 +335,20 @@ export const OwnerDashboard = () => {
         )}
       </main>
 
-      {/* Floating Add Item Button on mobile for fast access */}
+      {/* Floating Add Dish button on mobile */}
       {activeTab === 'items' && (
         <div className="fixed bottom-6 right-6 sm:hidden z-40">
           <button
             onClick={handleOpenAddItem}
-            className="w-14 h-14 rounded-full text-white shadow-xl flex items-center justify-center transition-transform active:scale-95"
-            style={{ backgroundColor: 'var(--color-brand-primary)' }}
-            aria-label="Add item"
+            className="w-14 h-14 rounded-full text-cream bg-forest shadow-xl flex items-center justify-center transition-transform active:scale-95"
+            aria-label="Add dish"
           >
             <Plus className="w-7 h-7" />
           </button>
         </div>
       )}
 
-      {/* Item Modal (Add / Edit) */}
+      {/* Modals */}
       <ItemModal
         isOpen={isItemModalOpen}
         item={editingItem}
@@ -373,7 +361,6 @@ export const OwnerDashboard = () => {
         onSave={handleSaveItem}
       />
 
-      {/* Shop Settings Modal */}
       <ShopSettingsModal
         isOpen={isSettingsModalOpen}
         shopSettings={shopSettings}
@@ -381,7 +368,6 @@ export const OwnerDashboard = () => {
         onSave={updateShopSettings}
       />
 
-      {/* Confirmation Dialog */}
       <ConfirmModal
         isOpen={confirmDelete.isOpen}
         title={confirmDelete.title}
@@ -390,7 +376,6 @@ export const OwnerDashboard = () => {
         onCancel={() => setConfirmDelete({ isOpen: false, type: null, target: null })}
       />
 
-      {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onDismiss={removeToast} />
     </div>
   );

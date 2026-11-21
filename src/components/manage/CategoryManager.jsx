@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, ArrowUp, ArrowDown, Coffee, Citrus, UtensilsCrossed, Utensils, Check, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowUp, ArrowDown, Coffee, Citrus, UtensilsCrossed, Utensils, X } from 'lucide-react';
 
 const AVAILABLE_ICONS = [
   { id: 'Coffee', label: 'Coffee / Tea', icon: Coffee },
-  { id: 'Citrus', label: 'Juice / Fruits', icon: Citrus },
-  { id: 'UtensilsCrossed', label: 'Snacks / Meals', icon: UtensilsCrossed },
-  { id: 'Utensils', label: 'General Food', icon: Utensils },
+  { id: 'Citrus', label: 'Juices & Elixirs', icon: Citrus },
+  { id: 'UtensilsCrossed', label: 'Savouries / Bakery', icon: UtensilsCrossed },
+  { id: 'Utensils', label: 'Culinary Dishes', icon: Utensils },
 ];
 
 export const CategoryManager = ({
@@ -60,39 +60,38 @@ export const CategoryManager = ({
   };
 
   return (
-    <div className="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-2xs">
-      <div className="flex items-center justify-between pb-4 border-b border-stone-100">
+    <div className="bg-white rounded-3xl p-5 sm:p-7 border border-cream-dark shadow-subtle">
+      <div className="flex items-center justify-between pb-4 border-b border-cream-dark">
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-stone-900">
-            Category Management
+          <h2 className="font-serif text-lg sm:text-xl font-bold text-forest">
+            Menu Sections & Categories
           </h2>
-          <p className="text-xs text-stone-500">
-            Organize menu sections and the order they appear to customers
+          <p className="text-xs text-charcoal-muted font-sans mt-0.5">
+            Organize courses and the order they appear on the customer menu
           </p>
         </div>
         {!isAdding && !editingId && (
           <button
             onClick={handleStartAdd}
-            className="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white flex items-center gap-1.5 shadow-sm transition-opacity hover:opacity-95"
-            style={{ backgroundColor: 'var(--color-brand-primary)' }}
+            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-cream bg-forest hover:bg-forest-light flex items-center gap-1.5 shadow-sm transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Category</span>
+            <span>Add Section</span>
           </button>
         )}
       </div>
 
       {/* Add / Edit Form */}
       {(isAdding || editingId) && (
-        <form onSubmit={handleSave} className="mt-4 p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
+        <form onSubmit={handleSave} className="mt-4 p-4 rounded-2xl bg-cream/60 border border-cream-dark space-y-3 font-sans">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-700">
-              {isAdding ? 'New Category' : 'Edit Category'}
+            <h3 className="text-xs font-bold uppercase tracking-wider text-forest">
+              {isAdding ? 'New Menu Section' : 'Edit Section'}
             </h3>
             <button
               type="button"
               onClick={handleCancel}
-              className="text-stone-400 hover:text-stone-600 p-1 rounded-lg"
+              className="text-charcoal-muted hover:text-charcoal p-1 rounded-lg"
             >
               <X className="w-4 h-4" />
             </button>
@@ -100,22 +99,22 @@ export const CategoryManager = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-bold text-stone-600 mb-1">
-                Category Name *
+              <label className="block text-[11px] font-semibold text-charcoal mb-1">
+                Section Name *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g. Desserts, Sandwiches, Cold Beverages"
-                className="w-full px-3 py-2 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="e.g. Signature Coffees, Artisanal Brunch"
+                className="w-full px-3 py-2 rounded-xl border border-cream-dark text-sm focus:outline-none focus:ring-2 focus:ring-forest/15 focus:border-forest"
                 autoFocus
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold text-stone-600 mb-1">
-                Icon
+              <label className="block text-[11px] font-semibold text-charcoal mb-1">
+                Section Icon
               </label>
               <div className="flex gap-2">
                 {AVAILABLE_ICONS.map((item) => {
@@ -128,8 +127,8 @@ export const CategoryManager = ({
                       onClick={() => setFormData({ ...formData, icon: item.id })}
                       className={`flex-1 py-2 rounded-xl border flex items-center justify-center transition-all ${
                         isSelected
-                          ? 'border-amber-500 bg-amber-50 text-amber-900 ring-2 ring-amber-500/20'
-                          : 'border-stone-300 bg-white text-stone-500 hover:bg-stone-50'
+                          ? 'border-forest bg-forest text-cream shadow-xs'
+                          : 'border-cream-dark bg-white text-charcoal-muted hover:bg-cream-light'
                       }`}
                       title={item.label}
                     >
@@ -142,15 +141,15 @@ export const CategoryManager = ({
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-stone-600 mb-1">
+            <label className="block text-[11px] font-semibold text-charcoal mb-1">
               Short Description (Optional)
             </label>
             <input
               type="text"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="e.g. Served fresh with green chutney"
-              className="w-full px-3 py-2 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="e.g. Made fresh to order with organic spices"
+              className="w-full px-3 py-2 rounded-xl border border-cream-dark text-sm focus:outline-none focus:ring-2 focus:ring-forest/15 focus:border-forest"
             />
           </div>
 
@@ -158,16 +157,15 @@ export const CategoryManager = ({
             <button
               type="button"
               onClick={handleCancel}
-              className="px-3.5 py-1.5 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-100"
+              className="px-3.5 py-1.5 rounded-xl border border-cream-dark text-xs font-medium text-charcoal hover:bg-cream-light"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-xl text-xs font-bold text-white shadow-xs"
-              style={{ backgroundColor: 'var(--color-brand-primary)' }}
+              className="px-4 py-1.5 rounded-xl text-xs font-semibold text-cream bg-forest hover:bg-forest-light shadow-xs"
             >
-              {isAdding ? 'Add Category' : 'Save Category'}
+              {isAdding ? 'Add Section' : 'Save Changes'}
             </button>
           </div>
         </form>
@@ -181,41 +179,41 @@ export const CategoryManager = ({
           return (
             <div
               key={cat.id}
-              className="flex items-center justify-between p-3.5 rounded-2xl border border-stone-200/80 bg-stone-50/50 hover:bg-white transition-all shadow-2xs"
+              className="flex items-center justify-between p-3.5 rounded-2xl border border-cream-dark/60 bg-cream/30 hover:bg-cream-light transition-all shadow-subtle"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <span className="w-7 h-7 rounded-lg bg-stone-200/80 text-stone-700 font-bold text-xs flex items-center justify-center shrink-0">
+                <span className="w-7 h-7 rounded-lg bg-cream-muted text-forest font-serif font-bold text-xs flex items-center justify-center shrink-0">
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <h4 className="font-bold text-stone-900 text-sm truncate flex items-center gap-2">
+                  <h4 className="font-serif font-bold text-forest text-sm truncate flex items-center gap-2">
                     <span>{cat.name}</span>
-                    <span className="text-[11px] font-semibold text-stone-500 bg-stone-200 px-2 py-0.5 rounded-full">
-                      {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                    <span className="text-[10px] font-sans font-medium text-charcoal-muted bg-white px-2 py-0.5 rounded-full border border-cream-dark">
+                      {itemCount} {itemCount === 1 ? 'dish' : 'dishes'}
                     </span>
                   </h4>
                   {cat.description && (
-                    <p className="text-xs text-stone-500 truncate mt-0.5">{cat.description}</p>
+                    <p className="text-xs text-charcoal-muted font-sans truncate mt-0.5">{cat.description}</p>
                   )}
                 </div>
               </div>
 
               {/* Actions */}
               <div className="flex items-center gap-1.5 shrink-0">
-                <div className="flex items-center border border-stone-200 rounded-xl overflow-hidden bg-white">
+                <div className="flex items-center border border-cream-dark rounded-xl overflow-hidden bg-white">
                   <button
                     onClick={() => onMoveCategory(cat.id, 'up')}
                     disabled={index === 0}
-                    className="p-1.5 hover:bg-stone-100 text-stone-500 disabled:opacity-30 disabled:pointer-events-none"
-                    title="Move Category Up"
+                    className="p-1.5 hover:bg-cream-muted text-charcoal-muted disabled:opacity-30 disabled:pointer-events-none"
+                    title="Move Up"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => onMoveCategory(cat.id, 'down')}
                     disabled={index === categories.length - 1}
-                    className="p-1.5 hover:bg-stone-100 text-stone-500 disabled:opacity-30 disabled:pointer-events-none border-l border-stone-200"
-                    title="Move Category Down"
+                    className="p-1.5 hover:bg-cream-muted text-charcoal-muted disabled:opacity-30 disabled:pointer-events-none border-l border-cream-dark"
+                    title="Move Down"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
@@ -223,16 +221,16 @@ export const CategoryManager = ({
 
                 <button
                   onClick={() => handleStartEdit(cat)}
-                  className="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors"
-                  title="Rename or edit category"
+                  className="p-2 rounded-xl bg-cream-muted hover:bg-cream-dark/60 text-forest transition-colors"
+                  title="Rename section"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
                 </button>
 
                 <button
                   onClick={() => onDeleteCategory(cat)}
-                  className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition-colors"
-                  title="Delete category"
+                  className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-colors"
+                  title="Delete section"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>

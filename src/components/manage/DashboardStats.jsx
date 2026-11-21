@@ -4,36 +4,36 @@ import { Utensils, CheckCircle2, Ban, Layers } from 'lucide-react';
 export const DashboardStats = ({ stats }) => {
   const cards = [
     {
-      label: 'Total Items',
+      label: 'Total Dishes',
       value: stats.totalItems,
       icon: Utensils,
-      color: 'text-stone-700',
-      bg: 'bg-stone-100',
-      border: 'border-stone-200',
+      color: 'text-forest',
+      bg: 'bg-forest/5',
+      border: 'border-cream-dark',
     },
     {
-      label: 'Active Available',
+      label: 'In Stock',
       value: stats.activeItems,
       icon: CheckCircle2,
-      color: 'text-emerald-700',
-      bg: 'bg-emerald-50',
-      border: 'border-emerald-200',
+      color: 'text-emerald-800',
+      bg: 'bg-emerald-50/60',
+      border: 'border-emerald-200/70',
     },
     {
-      label: 'Sold Out Items',
+      label: 'Sold Out',
       value: stats.soldOutItems,
       icon: Ban,
-      color: 'text-rose-700',
-      bg: 'bg-rose-50',
-      border: 'border-rose-200',
+      color: 'text-amber-900',
+      bg: 'bg-amber-50/60',
+      border: 'border-amber-200/70',
     },
     {
       label: 'Categories',
       value: stats.totalCategories,
       icon: Layers,
-      color: 'text-amber-700',
-      bg: 'bg-amber-50',
-      border: 'border-amber-200',
+      color: 'text-gold-dark',
+      bg: 'bg-gold/10',
+      border: 'border-gold/30',
     },
   ];
 
@@ -44,16 +44,16 @@ export const DashboardStats = ({ stats }) => {
         return (
           <div
             key={idx}
-            className={`p-3.5 sm:p-4 rounded-2xl bg-white border ${card.border} shadow-2xs flex items-center gap-3`}
+            className={`p-4 rounded-2xl bg-white border ${card.border} shadow-subtle flex items-center gap-3.5 transition-all`}
           >
             <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl ${card.bg} ${card.color} flex items-center justify-center shrink-0`}>
-              <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+              <Icon className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] sm:text-xs font-semibold text-stone-500 truncate">
+              <p className="text-[11px] sm:text-xs font-medium text-charcoal-muted uppercase tracking-wider truncate">
                 {card.label}
               </p>
-              <p className={`text-xl sm:text-2xl font-extrabold ${card.color} tracking-tight`}>
+              <p className={`text-xl sm:text-2xl font-serif font-bold ${card.color} tracking-tight`}>
                 {card.value}
               </p>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X, Sparkles, Filter } from 'lucide-react';
+import { Search, X, Sparkles } from 'lucide-react';
 
 export const MenuSearchFilter = ({
   searchQuery,
@@ -10,23 +10,23 @@ export const MenuSearchFilter = ({
   onPopularOnlyToggle,
 }) => {
   return (
-    <div className="max-w-2xl mx-auto px-4 py-3 sm:px-6">
-      {/* Search Input */}
+    <div className="max-w-4xl mx-auto px-4 pt-4 pb-2 sm:px-6">
+      {/* Search Bar */}
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
-          <Search className="w-4 h-4" />
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-charcoal-muted">
+          <Search className="w-4 h-4 text-sage" />
         </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search tea, filter coffee, juice, puff, samosa..."
-          className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-white border border-stone-200/90 text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-2xs"
+          placeholder="Search your favorite items..."
+          className="w-full pl-10 pr-9 py-2.5 rounded-full bg-white border border-cream-dark/90 text-sm text-charcoal placeholder:text-charcoal-muted/70 focus:outline-none focus:ring-2 focus:ring-forest/15 focus:border-forest transition-all shadow-subtle"
         />
         {searchQuery && (
           <button
             onClick={() => onSearchChange('')}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600"
+            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-charcoal-muted hover:text-charcoal"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />
@@ -38,26 +38,26 @@ export const MenuSearchFilter = ({
       <div className="flex items-center gap-2 mt-2.5 overflow-x-auto no-scrollbar">
         <button
           onClick={onVegOnlyToggle}
-          className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
+          className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all ${
             vegOnlyFilter
-              ? 'bg-emerald-600 text-white shadow-xs'
-              : 'bg-white text-stone-600 border border-stone-200 hover:bg-stone-50'
+              ? 'bg-emerald-900 text-cream shadow-xs'
+              : 'bg-white/80 text-charcoal-muted border border-cream-dark hover:bg-white hover:text-charcoal'
           }`}
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white" />
-          <span>Pure Veg</span>
+          <span className="w-2 h-2 rounded-full bg-emerald-600 ring-1 ring-white" />
+          <span>Vegetarian Only</span>
         </button>
 
         <button
           onClick={onPopularOnlyToggle}
-          className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
+          className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all ${
             popularOnlyFilter
-              ? 'bg-amber-500 text-white shadow-xs'
-              : 'bg-white text-stone-600 border border-stone-200 hover:bg-stone-50'
+              ? 'bg-gold text-forest-dark shadow-xs font-semibold'
+              : 'bg-white/80 text-charcoal-muted border border-cream-dark hover:bg-white hover:text-charcoal'
           }`}
         >
-          <Sparkles className="w-3 h-3 text-amber-300" />
-          <span>Bestsellers Only</span>
+          <Sparkles className="w-3 h-3 text-gold" />
+          <span>Bestsellers</span>
         </button>
       </div>
     </div>
